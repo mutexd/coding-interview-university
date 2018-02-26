@@ -21,38 +21,20 @@ void
 merge(int* nums1, int m, int* nums2, int n)
 {
     int i = 0, j = 0;
-    int *data = malloc(sizeof(int) * (m + n));
-/*    for (i = 0, j = 0; i < m && j < n;) {
-        if (nums1[i] <= nums2[j]) {
-            i++;
-        } else {
-            int hold = nums2[j];
-            memmove(nums1 + i + 1, nums1 + i, m - i);
-            nums1[i] = hold;
-            i++;
-            m++;
-            j++;
-        }
-    }*/
     for (i = 0, j = 0; i < m && j < n;) {
-        if (nums1[i] <= nums2[j]) {
-            data[i+j] = nums1[i];
+        // i+j is the actual
+        if (nums1[i+j] <= nums2[j]) {
             i++;
         } else {
-            data[i+j] = nums2[j];
+            int hold = nums2[j]; // save this because memmove is going to overwrite it
+            memmove(nums1 + i + j + 1, nums1 + i + j, sizeof(int) * (m - i));
+            nums1[i+j] = hold;
             j++;
         }
-    }
-    // if there any m left
-    for (; i < m; i++) {
-        data[i+j] = nums1[i];
     }
     for (; j < n; j++) {
-        data[i+j] = nums2[j];
+        nums1[i+j] = nums2[j];
     }
-
-    memcpy(nums1, data, sizeof(int)*(m+n));
-    free(data);
 }
 
 void
@@ -73,8 +55,8 @@ int
 main(int argc, char** argv)
 {
     //int question[] = { 19, 2, 3, 4, 2, 22, 43, 7 };
-    int question[] = {20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7};
-
+    //int question[] = {20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7};
+    int question[] = {4, 3, 2, 1};
     // input array
     merge_sort(question, sizeof(question)/sizeof(int));    
 
