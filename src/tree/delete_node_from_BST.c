@@ -23,12 +23,29 @@ struct TreeNode {
  *
  *
  */
-static int _childNum(struct TreeNode* root) {
-    int num = 0;
-    if (root->left != NULL) num++;
-    if (root->right != NULL) num++;
-    return num;
+
+struct TreeNode* deleteNode(struct TreeNode* root, int key) {
+    if (root == NULL) return NULL;
+    if (key < root->val) {
+        root->left = deleteNode(root->left, key);
+    } else if (key > root->val) {
+        root->right = deleteNode(root->right, key);
+    } else {
+        if (root->left != NULL && root->right != NULL) {
+            struct TreeNode* p = root->right;
+            root->right = p->left;
+            p->left = deleteNode(root, key);
+            return p;
+        } else if (root->left != NULL) {
+            return root->left;
+        } else { // both root->right != || == NULL satisfy
+            return root->right;
+        }
+    }
+    return root;
 }
+
+#if 0 // not a good solution
 struct TreeNode* _delete(struct TreeNode* root, int key, struct TreeNode** dir)
 {
     if (root == NULL) return NULL;
@@ -70,7 +87,7 @@ struct TreeNode* deleteNode(struct TreeNode* root, int key) {
     struct TreeNode fakeRoot;
     return _delete(root, key, &fakeRoot.left);
 }
-
+#endif
 int main(int argc, char **argv)
 {
     struct TreeNode root, left, right;
